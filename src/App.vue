@@ -36,7 +36,6 @@ export default {
     this.$root.$on("changeSingleCharacter",(val)=>{
       let $rand = Math.floor(Math.random() * this.total) + 1;
       while(this.characters.find(el=>{
-        console.log(el);
         return el.index == $rand //??
       })){
         $rand = Math.floor(Math.random() * this.total) + 1;
@@ -56,7 +55,7 @@ export default {
       while(i<3 ){
         $rand = Math.floor(Math.random() * val) + 1;
         if(this.characters.find(el=>{
-         return el.character.index == $rand
+         return el.index == $rand
         })){
           continue;
         }
