@@ -2,7 +2,7 @@
   <div id="app" class="container">
   <h1 class="text-center my-5">Generate Your Team</h1>
     <div v-if="!characters.length">
-      <h3 class="text-center">Loading... {{total}}</h3>
+      <h3 class="text-center">Loading...</h3>
     </div>
     <div v-else class="row">
       <div v-for="(character, index) in characters" class="col-xs-12 col-sm-6 col-md-4">
@@ -35,6 +35,12 @@ export default {
     //########################################
     this.$root.$on("changeSingleCharacter",(val)=>{
       let $rand = Math.floor(Math.random() * this.total) + 1;
+      while(this.characters.find(el=>{
+        console.log(el);
+        return el.index == $rand //??
+      })){
+        $rand = Math.floor(Math.random() * this.total) + 1;
+      }
       fetch("https://swapi.co/api/people/" + $rand ).then( res=>res.json()).then( json => {
         json.index= $rand;
         this.$set(this.characters,val,json)
@@ -45,8 +51,16 @@ export default {
   },
   watch:{
     total: function(val) { //Can't use Arrow Functions for watches
-      for(let i=0; i<3; i++){
-        let $rand = Math.floor(Math.random() * val) + 1;
+      let i=0;
+      let $rand
+      while(i<3 ){
+        $rand = Math.floor(Math.random() * val) + 1;
+        if(this.characters.find(el=>{
+         return el.character.index == $rand
+        })){
+          continue;
+        }
+        i++;
         fetch("https://swapi.co/api/people/" + $rand ).then( res=>res.json()).then( json => {
           json.index= $rand
           this.characters.push(json);
